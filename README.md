@@ -14,27 +14,37 @@ To set up your environment, you will need to generate a `utils.py` file that con
 ### Step 1. Generate Utils File
 In the `reverie/backend_server` folder (where `reverie.py` is located), create a new file titled `utils.py` and copy and paste the content below into the file:
 ```
+from os.path import join
 # Copy and paste your OpenAI API Key
-openai_api_key = "<Your OpenAI API>"
+openai_api_key = "anything-here"
 # Put your name
-key_owner = "<Name>"
+key_owner = <your-name>
+model = <model>
+base_folder = r'''<your-base-folder-here>'''
 
-maze_assets_loc = "../../environment/frontend_server/static_dirs/assets"
-env_matrix = f"{maze_assets_loc}/the_ville/matrix"
-env_visuals = f"{maze_assets_loc}/the_ville/visuals"
+maze_assets_loc = join(base_folder,"environment/frontend_server/static_dirs/assets")
+env_matrix = join(maze_assets_loc,"the_ville/matrix")
+env_visuals = join(maze_assets_loc,"the_ville/visuals")
 
-fs_storage = "../../environment/frontend_server/storage"
-fs_temp_storage = "../../environment/frontend_server/temp_storage"
+
+fs_storage = join(base_folder,"environment/frontend_server/storage")
+fs_temp_storage = join(base_folder,"environment/frontend_server/temp_storage")
+
+prompt_template_folder = join(base_folder,"reverie/backend_server/persona/prompt_template")
 
 collision_block_id = "32125"
 
+forked_simulation = "base_the_ville_isabella_maria_klaus"
+new_simulation = "test-simulation"
 # Verbose 
 debug = True
+
 ```
-Replace `<Your OpenAI API>` with your OpenAI API key, and `<name>` with your name.
+Replace `<your-base-folder-here>` with your current working directory, `<name>` with your name and `<model>` with the model that you're currently using on LM Studio, for example you can put `model="lmstudio-community/Meta-Llama-3-8B-Instruct-GGUF"`.
  
 ### Step 2. Install requirements.txt
 Install everything listed in the `requirements.txt` file (I strongly recommend first setting up a virtualenv as usual). A note on Python version: we tested our environment on Python 3.9.12. 
+#### TODO : update requirements.txt with the correct versions of the packages 
 
 ## <img src="https://joonsungpark.s3.amazonaws.com:443/static/assets/characters/profile/Klaus_Mueller.png" alt="Generative Klaus">   Running a Simulation 
 To run a new simulation, you will need to concurrently start two servers: the environment server and the agent simulation server.
