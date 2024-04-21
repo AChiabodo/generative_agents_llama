@@ -397,6 +397,7 @@ class ReverieServer:
           # {"persona": {"Maria Lopez": {"movement": [58, 9]}},
           #  "persona": {"Klaus Mueller": {"movement": [38, 12]}}, 
           #  "meta": {curr_time: <datetime>}}
+          create_folder_if_not_there(f"{sim_folder}/movement")
           curr_move_file = f"{sim_folder}/movement/{self.step}.json"
           with open(curr_move_file, "w") as outfile: 
             outfile.write(json.dumps(movements, indent=2))
@@ -604,9 +605,15 @@ if __name__ == '__main__':
   # rs = ReverieServer("July1_the_ville_isabella_maria_klaus-step-3-20", 
   #                    "July1_the_ville_isabella_maria_klaus-step-3-21")
   # rs.open_server()
-
-  origin = input("Enter the name of the forked simulation: ").strip()
-  target = input("Enter the name of the new simulation: ").strip()
+  from utils import forked_simulation, new_simulation
+  if not forked_simulation:
+    origin = input("Enter the name of the forked simulation: ").strip()
+  else: 
+      origin = forked_simulation
+  if not new_simulation:
+    target = input("Enter the name of the new simulation: ").strip()
+  else: 
+    target = new_simulation
 
   rs = ReverieServer(origin, target)
   rs.open_server()
