@@ -2190,9 +2190,8 @@ def run_gpt_prompt_chat_poignancy(persona, event_description, test_input=None, v
 
 
 # TODO: 
-#     return run_gpt_prompt_focal_pt(persona, statements, n)[0]
-#     TypeError: 'NoneType' object is not subscriptable
-#     Change and correct the clean up function for the new code
+#     Optimize the clean function to handle multiple possible outputs
+#     Add a fail safe
 def run_gpt_prompt_focal_pt(persona, statements, n, test_input=None, verbose=False): 
   def create_prompt_input(persona, statements, n, test_input=None): 
     prompt_input = [statements, str(n)]
@@ -2218,12 +2217,16 @@ def run_gpt_prompt_focal_pt(persona, statements, n, test_input=None, verbose=Fal
 
   # ChatGPT Plugin ===========================================================
   def __chat_func_clean_up(gpt_response, prompt=""): ############
-    ret = ast.literal_eval(gpt_response)
-    return ret
+    if isinstance(gpt_response,list):
+      for i in range(len(gpt_response)):
+        gpt_response[i] = gpt_response[i].strip()
+      return gpt_response
+    else:
+      return False
 
   def __chat_func_validate(gpt_response, prompt=""): ############
     try: 
-      __func_clean_up(gpt_response, prompt)
+      __chat_func_clean_up(gpt_response, prompt)
       return True
     except:
       return False 
@@ -2233,7 +2236,7 @@ def run_gpt_prompt_focal_pt(persona, statements, n, test_input=None, verbose=Fal
   gpt_param = {"engine": "text-davinci-002", "max_tokens": 15, 
                "temperature": 0, "top_p": 1, "stream": False,
                "frequency_penalty": 0, "presence_penalty": 0, "stop": None}
-  prompt_template = prompt_template_folder + "/v3_ChatGPT/generate_focal_pt_v1.txt" ########
+  prompt_template = prompt_template_folder + "/v3_ChatGPT/generate_focal_pt_v2.txt" ########
   prompt_input = create_prompt_input(persona, statements, n)  ########
   prompt = generate_prompt(prompt_input, prompt_template)
   example_output = '["What should Jane do for lunch", "Does Jane like strawberry", "Who is Jane"]' ########
