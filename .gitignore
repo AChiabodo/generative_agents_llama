@@ -102,3 +102,6 @@ ENV/
 .ropeproject
 
 storage/
+
+test.*
+temp.*
